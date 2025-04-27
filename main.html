@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./main.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+
+    <title>Document</title>
+</head>
+<body>
+
+
+
+<center>
+
+    
+    <h1>SIMPLE TASK TRACKER</h1>
+
+    <form id="createForm">
+      <input type="text" id="title" placeholder=" Title 📒" required>
+      <textarea id="description" placeholder=" Description 📃" required></textarea>
+      <input type="text" id="assignedTo" placeholder="Assigned To 📇" required>
+      <button class="id" type="submit" id="submit">Create  ✅</button>
+    </form>
+  
+  
+      
+    <div class="board">
+      <div class="column" id="todo">
+        <h2>To Do✔️</h2>
+      </div>
+      <div class="column" id="inprogress">
+        <h2>Progress ⏭️</h2>
+      </div>
+      <div class="column" id="done">
+        <h2>Done 👍</h2>
+      </div>
+    </div>
+  </div>
+</center>
+<script>
+  let taskId = 0;
+
+  document.getElementById('createForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    createTask();
+  });
+
+  function createTask(title, description, assignedTo, status = 'todo') {
+    const taskTitle = title || document.getElementById('title').value;
+    const taskDesc = description || document.getElementById('description').value;
+    const assigned = assignedTo || document.getElementById('assignedTo').value;
+
+    const task = document.createElement('div');
+    task.className = 'task';
+    task.id = 'task-' + taskId++;
+
+    task.innerHTML = `
+      <strong>${taskTitle}</strong><br>
+      <small>${taskDesc}</small><br>
+      <small>Assigned to: ${assigned}</small><br>
+      <button onclick="moveTask(this.parentNode, 'inprogress')">Move to In Progress</button>
+      <button onclick="moveTask(this.parentNode, 'done')">Move to Done</button>
+      <button onclick="editTask(this.parentNode)">Edit</button>
+      <button onclick="deleteTask(this.parentNode)">Delete</button>
+    `;
+
+    document.getElementById(status).appendChild(task);
+
+    if (!title) {
+      document.getElementById('createForm').reset();
+    }
+  }
+
+  function moveTask(task, targetStatus) {
+    document.getElementById(targetStatus).appendChild(task);
+  }
+
+  function deleteTask(task) {
+    task.remove();
+  }
+
+  function editTask(task) {
+    const currentTitle = task.querySelector('strong').innerText;
+    const currentDesc = task.querySelectorAll('small')[0].innerText;
+    const currentAssigned = task.querySelectorAll('small')[1].innerText.replace('Assigned to: ', '');
+
+    const newTitle = prompt('Edit Title:', currentTitle);
+    const newDesc = prompt('Edit Description:', currentDesc);
+    const newAssigned = prompt('Edit Assigned To:', currentAssigned);
+
+    if (newTitle && newDesc && newAssigned) {
+      task.querySelector('strong').innerText = newTitle;
+      task.querySelectorAll('small')[0].innerText = newDesc;
+      task.querySelectorAll('small')[1].innerText = 'Assigned to: ' + newAssigned;
+    }
+  }
+</script>
+
+   
+    
+
+
+
+
+
+
+    <script type="module" src="main.js"></script>
+</body>
+</html>
